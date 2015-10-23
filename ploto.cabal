@@ -19,8 +19,11 @@ library
                      , Ploto.Parser
                      , Ploto.Types
   build-depends:       base >= 4.7 && < 5
+                     , containers >= 0.5.6.2
+                     , mtl >= 2.2.1
                      , parsec
                      , template-haskell >= 2.10.0.0
+                     , transformers >= 0.4.2.0
   default-language:    Haskell2010
 
 executable ploto-exe
