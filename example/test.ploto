@@ -1,0 +1,15 @@
+func test(str) {
+  var concated = concat("2 + 3 = ", str)
+  print(concated)
+}
+
+func average(x, y) {
+  return div(plus(x,y),2)
+}
+
+var a = 2
+var b = 3
+
+func main() {
+  test(average(a, b))
+}
