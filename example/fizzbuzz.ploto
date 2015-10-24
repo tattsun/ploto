@@ -1,0 +1,25 @@
+func canDiv5(num) {
+  eq(div(num,5),0)
+}
+
+func canDiv3(num) {
+  eq(div(num,3),0)
+}
+
+func fizzbuzz(num) {
+  if(eq(num, 100)) {
+  } else {
+    if(and(canDiv5(num), canDiv3(num))) {
+    } else {
+      if (canDiv5(num)) {
+      }
+      if (canDiv3(num)) {
+      }
+    }
+  }
+  fizzbuzz(add(num, 1))
+}
+
+func main() {
+  println("OK")
+}

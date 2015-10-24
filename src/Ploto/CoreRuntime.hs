@@ -153,6 +153,8 @@ primFuncs = [("print", p_print)
             ,("gte", p_gte)
             ,("lt", p_lt)
             ,("lte", p_lte)
+            ,("and", p_and)
+            ,("or", p_or)
             ]
 
 p_print :: PrimFunc
@@ -233,3 +235,13 @@ p_lte ((PrimInteger x):(PrimInteger y):[]) =
   then return PrimTrue
   else return PrimFalse
 p_lte _ = error "argument_error"
+
+p_and :: PrimFunc
+p_and xs = if all (==PrimTrue) xs
+           then return PrimTrue
+           else return PrimFalse
+
+p_or :: PrimFunc
+p_or xs = if any (==PrimTrue) xs
+          then return PrimTrue
+          else return PrimFalse

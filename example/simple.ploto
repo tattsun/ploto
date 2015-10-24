@@ -1,13 +1,22 @@
 func sayHello(name) {
+   if (true) {
+     println("OK")
+   }
+
   println(concat("Hello, my name is ", name))
 }
 
 func main() {
-   var x = 124
-   sayHello("tattsun")
-   println(x)
-
-   if(gt(100, 50)) {
-     println("100 > 50")
+   if (true) {
+     println("OK")
    }
+
+   var x = 124
+   if (true) {
+     println("OK")
+   }
+
+  sayHello("tattsun")
+   print(x)
+
 }
