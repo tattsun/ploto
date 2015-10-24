@@ -1,3 +1,3 @@
 #### todo
 
-- Primitive Functions (e.g. print, arithmetic funcs, etc...)
+[x] Primitive Functions (e.g. print, arithmetic funcs, etc...)
