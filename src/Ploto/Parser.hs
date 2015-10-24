@@ -35,7 +35,7 @@ plotoDef = P.LanguageDef { P.commentStart = "/*"
 lexer :: (Stream s m Char) => P.GenTokenParser s u m
 lexer = P.makeTokenParser plotoDef
 
-program = many core
+program = core `sepBy` ws
 
 core = try varDecl <|> funcDecl
 
@@ -117,3 +117,6 @@ parens = P.parens lexer
 
 comma  :: (Stream s Identity Char) => Parsec s u String
 comma = P.comma lexer
+
+ws  :: (Stream s Identity Char) => Parsec s u ()
+ws = P.whiteSpace lexer
