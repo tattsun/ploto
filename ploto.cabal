@@ -18,6 +18,7 @@ library
   exposed-modules:     Lib
                      , Ploto.Parser
                      , Ploto.Types
+                     , Ploto.CoreRuntime
   build-depends:       base >= 4.7 && < 5
                      , containers >= 0.5.6.2
                      , mtl >= 2.2.1

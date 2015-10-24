@@ -64,13 +64,6 @@ funcCall = do
 cond :: (Stream s Identity Char) => Parsec s u Core
 cond = string "CONCONCONCONC" >> return (Prim PrimNil)
 
-returnAst :: (Stream s Identity Char) => Parsec s u Core
-returnAst = do
-  _ <- string "return"
-  skipMany1 space
-  val <- expr
-  return $ Return val
-
 prim :: (Stream s Identity Char) => Parsec s u Core
 prim = try primString <|>  primNumber
 
@@ -95,7 +88,7 @@ scope :: (Stream s Identity Char) => Parsec s u Scope
 scope = do
   _ <- char '{'
   skipMany space
-  cores <- (try varDecl <|> try funcCall <|> try cond <|> returnAst)
+  cores <- (try varDecl <|> try funcCall <|> cond)
            `sepEndBy` wsSeparator
   skipMany space
   _ <- char '}'

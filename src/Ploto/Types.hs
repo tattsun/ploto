@@ -1,15 +1,21 @@
 {-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Ploto.Types where
 
 import qualified Data.Map as M
 import Control.Monad.State
 
+type PrimFunc = [PrimValue] -> CoreRuntimeT PrimValue
+
+instance Show PrimFunc where
+  show = const "Primitive Function"
+
 data Core = VarDecl Symbol Core
           | FuncDecl Symbol [Symbol] Scope
+          | PrimFunc PrimFunc
           | FuncCall Symbol [Core]
           | Cond Core Core
-          | Return Core
           | Prim PrimValue
           | Symbol Symbol
           | Scope Scope
@@ -38,4 +44,5 @@ data CoreRuntime = CoreRuntime { crCallStack :: [CrCallStackFrame]
                                }
 newtype CoreRuntimeT a = CoreRuntimeT { unCoreRuntimeT :: StateT CoreRuntime IO a
                                       }
-                         deriving (Functor, Applicative, Monad, MonadState CoreRuntime)
+                         deriving (Functor, Applicative, Monad, MonadState CoreRuntime
+                                  ,MonadIO)

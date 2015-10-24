@@ -1,4 +1,9 @@
+func sayHello(name) {
+  println(concat("Hello, my name is ", name))
+}
+
 func main() {
-  var x = 1
-  test(a, b)
+   sayHello("tattsun")
+   var x = 124
+   print(x)
 }
