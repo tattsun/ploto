@@ -148,6 +148,7 @@ primFuncs = [("print", p_print)
             ,("sub", p_sub)
             ,("mul", p_mul)
             ,("div", p_div)
+            ,("mod", p_mod)
             ,("eq", p_eq)
             ,("gt", p_gt)
             ,("gte", p_gte)
@@ -200,6 +201,10 @@ p_mul _ = error "argument error"
 p_div :: PrimFunc
 p_div ((PrimInteger x):(PrimInteger y):[]) = return $ PrimInteger (x `div` y)
 p_div _ = error "argument error"
+
+p_mod :: PrimFunc
+p_mod ((PrimInteger x):(PrimInteger y):[]) = return $ PrimInteger (x `mod` y)
+p_mod _ = error "argument error"
 
 p_eq :: PrimFunc
 p_eq (x:y:[]) = if x == y

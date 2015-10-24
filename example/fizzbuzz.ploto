@@ -1,25 +1,32 @@
 func canDiv5(num) {
-  eq(div(num,5),0)
+  eq(mod(num,5),0)
 }
 
 func canDiv3(num) {
-  eq(div(num,3),0)
+  eq(mod(num,3),0)
 }
 
 func fizzbuzz(num) {
-  if(eq(num, 100)) {
+  if(eq(num, 31)) {
   } else {
     if(and(canDiv5(num), canDiv3(num))) {
+      println("Fizz Buzz")
     } else {
-      if (canDiv5(num)) {
-      }
-      if (canDiv3(num)) {
+      if (or(canDiv5(num), canDiv3(num))) {
+        if (canDiv5(num)) {
+          println("Buzz")
+        }
+        if (canDiv3(num)) {
+          println("Fizz")
+        }
+      } else {
+        println(num)
       }
     }
+   fizzbuzz(add(num, 1))
   }
-  fizzbuzz(add(num, 1))
 }
 
 func main() {
-  println("OK")
+  fizzbuzz(1)
 }
