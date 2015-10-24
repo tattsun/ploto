@@ -62,10 +62,28 @@ funcCall = do
   return $ FuncCall funcname exprs
 
 cond :: (Stream s Identity Char) => Parsec s u Core
-cond = string "CONCONCONCONC" >> return (Prim PrimNil)
+cond = do
+  _ <- string "if"
+  skipMany space
+  _ <- char '('
+  skipMany space
+  condition <- expr
+  skipMany space
+  _ <- char ')'
+  skipMany1 space
+  s <- scope
+  skipMany1 space
+  elsecond <- optionMaybe $ try elseCond
+  return $ Cond condition s elsecond
+
+elseCond :: (Stream s Identity Char) => Parsec s u Scope
+elseCond = do
+  _ <- string "else"
+  skipMany space
+  scope
 
 prim :: (Stream s Identity Char) => Parsec s u Core
-prim = try primString <|>  primNumber
+prim = try primString <|> try primTrue <|> try primFalse <|> primNumber
 
 primString :: (Stream s Identity Char) => Parsec s u Core
 primString = do
@@ -79,6 +97,17 @@ primNumber = do
   num <- many1 digit
   return $ Prim (PrimInteger $ read num)
 
+primTrue :: (Stream s Identity Char) => Parsec s u Core
+primTrue = do
+  _ <- string "true"
+  return $ Prim PrimTrue
+
+primFalse :: (Stream s Identity Char) => Parsec s u Core
+primFalse = do
+  _ <- string "false"
+  return $ Prim PrimFalse
+
+
 symbol :: (Stream s Identity Char) => Parsec s u Symbol
 symbol = do
   sym <- many1 alphaNum
@@ -88,7 +117,7 @@ scope :: (Stream s Identity Char) => Parsec s u Scope
 scope = do
   _ <- char '{'
   skipMany space
-  cores <- (try varDecl <|> try funcCall <|> cond)
+  cores <- (try varDecl <|> try cond <|> funcCall)
            `sepEndBy` wsSeparator
   skipMany space
   _ <- char '}'

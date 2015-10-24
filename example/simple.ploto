@@ -5,5 +5,9 @@ func sayHello(name) {
 func main() {
    var x = 124
    sayHello("tattsun")
-   print(x)
+   println(x)
+
+   if(gt(100, 50)) {
+     println("100 > 50")
+   }
 }

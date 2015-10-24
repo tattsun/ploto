@@ -110,6 +110,13 @@ eval (FuncCall sym args) = do
       result <- eval $ Scope scope
       void popStackFrame
       return result
+eval (Cond c s1 s2) = do
+  cond <- eval c
+  if cond == PrimTrue
+    then eval $ Scope s1
+    else case s2 of
+    Nothing -> return PrimNil
+    Just s2' -> eval $ Scope s2'
 eval (Prim prim) = return prim
 eval (Symbol sym) = do
   var <- resolveVar sym
@@ -141,6 +148,11 @@ primFuncs = [("print", p_print)
             ,("sub", p_sub)
             ,("mul", p_mul)
             ,("div", p_div)
+            ,("eq", p_eq)
+            ,("gt", p_gt)
+            ,("gte", p_gte)
+            ,("lt", p_lt)
+            ,("lte", p_lte)
             ]
 
 p_print :: PrimFunc
@@ -152,19 +164,20 @@ p_print (x:[]) = p_print' x
     p_print' p@(PrimInteger int) = do
       liftIO $ putStr (show int)
       return p
+    p_print' p@PrimTrue = do
+      liftIO $ putStr "true"
+      return p
+    p_print' p@PrimFalse = do
+      liftIO $ putStr "false"
+      return p
 p_print _ = error "argument error"
 
 
 p_println :: PrimFunc
-p_println (x:[]) = p_println' x
-  where
-    p_println' p@(PrimString str) = do
-      liftIO $ putStrLn str
-      return p
-    p_println' p@(PrimInteger int) = do
-      liftIO $ putStrLn (show int)
-      return p
-p_println _ = error "argument error"
+p_println xs = do
+  res <- p_print xs
+  liftIO $ putStr "\n"
+  return res
 
 p_concat :: PrimFunc
 p_concat ((PrimString x):(PrimString y):[]) = return $ PrimString (x++y)
@@ -185,3 +198,38 @@ p_mul _ = error "argument error"
 p_div :: PrimFunc
 p_div ((PrimInteger x):(PrimInteger y):[]) = return $ PrimInteger (x `div` y)
 p_div _ = error "argument error"
+
+p_eq :: PrimFunc
+p_eq (x:y:[]) = if x == y
+                then return PrimTrue
+                else return PrimFalse
+p_eq _ = error "argument_error"
+
+p_gt :: PrimFunc
+p_gt ((PrimInteger x):(PrimInteger y):[]) =
+  if x > y
+  then return PrimTrue
+  else return PrimFalse
+p_gt _ = error "argument_error"
+
+
+p_gte :: PrimFunc
+p_gte ((PrimInteger x):(PrimInteger y):[]) =
+  if x >= y
+  then return PrimTrue
+  else return PrimFalse
+p_gte _ = error "argument_error"
+
+p_lt :: PrimFunc
+p_lt ((PrimInteger x):(PrimInteger y):[]) =
+  if x < y
+  then return PrimTrue
+  else return PrimFalse
+p_lt _ = error "argument_error"
+
+p_lte :: PrimFunc
+p_lte ((PrimInteger x):(PrimInteger y):[]) =
+  if x <= y
+  then return PrimTrue
+  else return PrimFalse
+p_lte _ = error "argument_error"

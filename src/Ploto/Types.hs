@@ -15,7 +15,7 @@ data Core = VarDecl Symbol Core
           | FuncDecl Symbol [Symbol] Scope
           | PrimFunc PrimFunc
           | FuncCall Symbol [Core]
-          | Cond Core Core
+          | Cond Core Scope (Maybe Scope)
           | Prim PrimValue
           | Symbol Symbol
           | Scope Scope
@@ -28,8 +28,10 @@ newtype Scope = ScopeValue { unScope :: [Core] }
 
 data PrimValue = PrimString String
                | PrimInteger Int
+               | PrimTrue
+               | PrimFalse
                | PrimNil
-               deriving Show
+               deriving (Show, Eq)
 
 newtype AST a = AST { unAST :: a }
                 deriving Show
