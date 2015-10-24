@@ -26,9 +26,10 @@ resolveVar :: Symbol -> CoreRuntimeT (Maybe PrimValue)
 resolveVar sym = do
   stacks <- crCallStack <$> get
   globalMap <- crGlobalVarScope <$> get
-  let varOnStack = foldl (\acc sf -> if isNothing acc
-                                     then M.lookup sym (unVarScope $ crLocalVarScope sf)
-                                     else acc) Nothing stacks
+  let varOnStack =
+        if null stacks
+        then Nothing
+        else M.lookup sym (unVarScope $ crLocalVarScope (head stacks))
   if isNothing varOnStack
     then return $ M.lookup sym (unVarScope $ globalMap)
     else return varOnStack

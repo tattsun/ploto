@@ -3,7 +3,7 @@ func sayHello(name) {
 }
 
 func main() {
-   sayHello("tattsun")
    var x = 124
+   sayHello("tattsun")
    print(x)
 }
